@@ -13,16 +13,10 @@ protocol FloatingPanelDelegate: AnyObject {
     func stateChanged(newState: Int)
 }
 
-class ViewController: UIViewController, FloatingPanelDelegate{
-    func stateChanged(newState: Int) {
-        print(#function)
-    }
-    
-    
+class ViewController: UIViewController {
+
     @IBOutlet weak var tableView: UITableView!
-//    weak var delegate: FloatingPanelDelegate?
-    
-//    var contentVC: ContentViewController?
+    weak var delegate: FloatingPanelDelegate?
     
     var dummyList = ["Transcription 1", "Transcription 2", "Transcription 3", "Transcription 4", "Transcription 5"]
     
@@ -31,9 +25,6 @@ class ViewController: UIViewController, FloatingPanelDelegate{
         
         tableView.delegate = self
         tableView.dataSource = self
-        
-//        delegate = self
-//        delegate = ContentViewController.self
     }
 
     @IBAction func show(_ sender: Any) {
@@ -44,16 +35,13 @@ class ViewController: UIViewController, FloatingPanelDelegate{
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "ContentVC") as? ContentViewController else {return}
         
-        vc.delegate = self
+        delegate = vc
         
         fpc.set(contentViewController: vc)
         
         let appearance = SurfaceAppearance()
         appearance.cornerRadius = 10.0
-        
         fpc.surfaceView.appearance = appearance
-
-//        fpc.isRemovalInteractionEnabled = true // Optional: Let it removable by a swipe-down
 
         self.present(fpc, animated: true, completion: nil)
     }
@@ -63,28 +51,20 @@ class ViewController: UIViewController, FloatingPanelDelegate{
 extension ViewController: FloatingPanelControllerDelegate {
     
     func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
-        print(#function)
 
         let vc = fpc.contentViewController as? ContentViewController
         
         if fpc.state == .full {
-            print("masuk 3")
-//            vc.stateChanged(newState: <#T##Int#>)
-//            delegate?.stateChanged(newState: 3)
-//            contentVC?.stateChanged(newState: 3)
-            vc?.stateChanged(newState: 3)
+            delegate?.stateChanged(newState: 3)
+//            vc?.stateChanged(newState: 3)
         }
         else if fpc.state == .half {
-            print("masuk 2")
-//            delegate?.stateChanged(newState: 2)
-//            contentVC?.stateChanged(newState: 2)
-            vc?.stateChanged(newState: 2)
+            delegate?.stateChanged(newState: 2)
+//            vc?.stateChanged(newState: 2)
         }
         else if fpc.state == .tip {
-            print("masuk 1")
-//            delegate?.stateChanged(newState: 1)
-//            contentVC?.stateChanged(newState: 1)
-            vc?.stateChanged(newState: 1)
+            delegate?.stateChanged(newState: 1)
+//            vc?.stateChanged(newState: 1)
         }
     }
 }
