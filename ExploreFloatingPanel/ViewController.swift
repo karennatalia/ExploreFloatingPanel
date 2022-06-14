@@ -7,16 +7,10 @@
 
 import UIKit
 import FloatingPanel
-import MapKit
-
-protocol FloatingPanelDelegate: AnyObject {
-    func stateChanged(newState: Int)
-}
 
 class ViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    weak var delegate: FloatingPanelDelegate?
     
     var dummyList = ["Transcription 1", "Transcription 2", "Transcription 3", "Transcription 4", "Transcription 5"]
     
@@ -34,8 +28,6 @@ class ViewController: UIViewController {
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "ContentVC") as? ContentViewController else {return}
-        
-        delegate = vc
         
         fpc.set(contentViewController: vc)
         
@@ -55,16 +47,13 @@ extension ViewController: FloatingPanelControllerDelegate {
         let vc = fpc.contentViewController as? ContentViewController
         
         if fpc.state == .full {
-            delegate?.stateChanged(newState: 3)
-//            vc?.stateChanged(newState: 3)
+            vc?.stateChanged(newState: 3)
         }
         else if fpc.state == .half {
-            delegate?.stateChanged(newState: 2)
-//            vc?.stateChanged(newState: 2)
+            vc?.stateChanged(newState: 2)
         }
         else if fpc.state == .tip {
-            delegate?.stateChanged(newState: 1)
-//            vc?.stateChanged(newState: 1)
+            vc?.stateChanged(newState: 1)
         }
     }
 }

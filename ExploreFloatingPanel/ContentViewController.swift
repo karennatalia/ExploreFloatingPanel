@@ -21,9 +21,7 @@ class ContentViewController: UIViewController {
     @IBAction func cancel(_ sender: Any) {
         dismiss(animated: true)
     }
-}
-
-extension ContentViewController: FloatingPanelDelegate {
+    
     func stateChanged(newState: Int) {
         switch newState {
         case 3:
@@ -41,3 +39,4 @@ extension ContentViewController: FloatingPanelDelegate {
         }
     }
 }
+
