@@ -13,10 +13,14 @@ protocol FloatingPanelDelegate: AnyObject {
     func stateChanged(newState: Int)
 }
 
-class ViewController: UIViewController, FloatingPanelControllerDelegate {
+class ViewController: UIViewController, FloatingPanelDelegate{
+    func stateChanged(newState: Int) {
+        print(#function)
+    }
+    
     
     @IBOutlet weak var tableView: UITableView!
-    weak var delegate: FloatingPanelDelegate?
+//    weak var delegate: FloatingPanelDelegate?
     
 //    var contentVC: ContentViewController?
     
@@ -34,10 +38,13 @@ class ViewController: UIViewController, FloatingPanelControllerDelegate {
 
     @IBAction func show(_ sender: Any) {
         let fpc = FloatingPanelController(delegate: self)
-        fpc.layout = MyFloatingPanelLayout()
+        let floatingPanel = MyFloatingPanelLayout()
+        fpc.layout = floatingPanel
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "ContentVC") as? ContentViewController else {return}
+        
+        vc.delegate = self
         
         fpc.set(contentViewController: vc)
         
@@ -53,30 +60,31 @@ class ViewController: UIViewController, FloatingPanelControllerDelegate {
 
 }
 
-extension ContentViewController: FloatingPanelControllerDelegate {
+extension ViewController: FloatingPanelControllerDelegate {
     
     func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
         print(#function)
 
-        let vc = ContentViewController()
+        let vc = fpc.contentViewController as? ContentViewController
         
         if fpc.state == .full {
             print("masuk 3")
-            delegate?.stateChanged(newState: 3)
+//            vc.stateChanged(newState: <#T##Int#>)
+//            delegate?.stateChanged(newState: 3)
 //            contentVC?.stateChanged(newState: 3)
-//            vc.stateChanged(newState: 3)
+            vc?.stateChanged(newState: 3)
         }
         else if fpc.state == .half {
             print("masuk 2")
-            delegate?.stateChanged(newState: 2)
+//            delegate?.stateChanged(newState: 2)
 //            contentVC?.stateChanged(newState: 2)
-//            vc.stateChanged(newState: 2)
+            vc?.stateChanged(newState: 2)
         }
         else if fpc.state == .tip {
             print("masuk 1")
-            delegate?.stateChanged(newState: 1)
+//            delegate?.stateChanged(newState: 1)
 //            contentVC?.stateChanged(newState: 1)
-//            vc.stateChanged(newState: 1)
+            vc?.stateChanged(newState: 1)
         }
     }
 }

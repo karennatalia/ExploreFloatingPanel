@@ -23,7 +23,7 @@ class ContentViewController: UIViewController {
 //        vc!.delegate = self
         label.text = "did load"
         
-        delegate = self
+        //delegate = self
     }
     
     @IBAction func cancel(_ sender: Any) {
